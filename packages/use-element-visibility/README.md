@@ -1,0 +1,154 @@
+# useElementVisibility
+IntersectionObserver API + React Hooks
+
+[![NPM](https://img.shields.io/npm/v/@yongdamsh/use-element-visibility.svg)](https://www.npmjs.com/package/use-element-visibility)
+
+
+## Installation
+
+### NPM
+
+To install the latest version,
+
+```sh
+npm install --save @yongdamsh/use-element-visibility
+```
+
+### CDN
+
+Add this script after the React and ReactDOM script tags.
+
+```
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@yongdamsh/use-element-visibility"></script>
+```
+
+
+## Usage
+
+### Step.1 Initialize with Options
+
+Initialize the hook by passing the same [option](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Intersection_observer_options) as IntersectionObserver.
+
+```jsx
+import useElementVisibility from '@yongdamsh/use-element-visibility'
+
+function SomeComponent() {
+  // If there is no option, the following default values are applied.
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.0
+  }
+
+  const [visibility, subscribe, unsubscribe] = useElementVisibility(options)
+
+  return (
+    // Refer to Step.2
+  )
+}
+```
+
+### Step.2 Use the visibility information and subscription-related functions
+
+`useElementVisibility` hook returns the following items as an array:
+
+#### `visibility`  
+Intersection information of the same specification as [IntersectionObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry)
+
+Example:  
+```
+{
+  boundingClientRect: {
+    bottom: 1788.875,
+    height: 836,
+    left: 0,
+    right: 455,
+    top: 952.875,
+    width: 455,
+    x: 0,
+    y: 952.875
+  },
+  intersectionRatio: 0.0,
+  intersectionRect: {
+    bottom: 0,
+    height: 0,
+    left: 0,
+    right: 0,
+    top: 0,
+    width: 0,
+    x: 0,
+    y: 0
+  },
+  isIntersecting: false,
+  isVisible: false,
+  rootBounds: {
+    bottom: 836,
+    height: 836,
+    left: 0,
+    right: 455,
+    top: 0,
+    width: 455,
+    x: 0,
+    y: 0
+  },
+  target: Element, // https://developer.mozilla.org/ko/docs/Web/API/Element
+  time: 6562.770000004093
+}
+```
+
+#### `subscribe`  
+A function for subscribing to intersection information. Use the same as [ref](https://reactjs.org/docs/hooks-reference.html#useref) for the target node.
+
+```jsx
+function SomeComponent() {
+  const [visibility, subscribe, unsubscribe] = useElementVisibility()
+
+  return (
+    <main>
+      <ul>
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+      </ul>
+      <footer id="bottom-observer" ref={subscribe}>When this area is visible, load the list further.</footer>
+    </main>
+  )
+}
+```
+
+#### `unsubscribe`
+A function to cancel subscription. This is useful if you need only until the node is exposed on the screen.
+
+```jsx
+function SomeComponent() {
+  const [visibility, subscribe, unsubscribe] = useElementVisibility()
+
+  useEffect(() => {
+    if (visibility.isIntersecting) {
+      unsubscribe();
+
+      // Process lazy loading
+      const lazyImage = visibility.target;
+      lazyImage.src = lazyImage.dataset.src;
+    }
+  }, [visibility])
+
+  return (
+    <img ref={subscribe} data-src="https://example.com/foo.jpg" />
+  )
+}
+```
+
+
+## Basic Example
+
+Run the command below before looking at the example,
+
+```sh
+npm run build
+```
+
+Then run [index.html](example/index.html) in your browser.
+
