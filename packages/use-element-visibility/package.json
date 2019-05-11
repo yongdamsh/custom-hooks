@@ -2,7 +2,7 @@
   "name": "@yongdamsh/use-element-visibility",
   "version": "0.1.1",
   "description": "IntersectionObserver + React Hooks",
-  "main": "dist/useElementVisibility.js",
+  "main": "dist/useElementVisibility.min.js",
   "publishConfig": {
     "access": "public"
   },
@@ -10,7 +10,8 @@
     "lint": "eslint src/",
     "test": "jest",
     "build": "rollup -c",
-    "prepare": "npm run lint && npm run test && npm run build"
+    "build:prod": "rollup -c --environment INCLUDE_DEPS,BUILD:production",
+    "prepare": "npm run lint && npm run test && npm run build:prod"
   },
   "keywords": [],
   "author": "",
@@ -29,7 +30,9 @@
     "jest": "^24.8.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "rollup": "^1.11.3"
+    "rollup": "^1.11.3",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-babel-minify": "^8.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",

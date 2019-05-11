@@ -152,3 +152,11 @@ npm run build
 
 Then run [index.html](example/index.html) in your browser.
 
+
+## Browser Support
+
+Modern browsers and IE9+
+
+References:
+- IntersectionObserver with polyfill: https://github.com/w3c/IntersectionObserver/tree/master/polyfill#browser-support
+- React with polyfill: https://reactjs.org/docs/react-dom.html#browser-support
