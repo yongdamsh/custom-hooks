@@ -1,6 +1,6 @@
 {
   "name": "use-element-visibility",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "IntersectionObserver + React Hooks",
   "main": "dist/useElementVisibility.js",
   "scripts": {
