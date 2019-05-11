@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <body style="margin: 0; padding: 0; text-align: center;">
+    <div id="root" />
+
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="../dist/bundle.js"></script>
+    <script type="text/babel">
+      const windowHeight = window.innerHeight + 'px';
+      const textWrapperStyle = {
+        position: 'fixed',
+        bottom: '10px',
+        width: '100%',
+      };
+      const textStyle = {
+        color: 'white',
+        fontSize: '24px',
+        textAlign: 'center',
+      };
+      const threshold = new Array(101).fill().map((_, index) => index * 0.01);
+
+      function InfiniteScroll() {
+        const [visibility, subscribe] = useElementVisibility({ threshold });
+
+        return (
+          <React.Fragment>
+            <h1>InfiniteScroll Example</h1>
+            <p>Scroll down ⬇️ </p>
+            <div style={{ height: windowHeight }} />
+            <div ref={subscribe} style={{ height: windowHeight, backgroundColor: 'red' }} />
+            <div style={textWrapperStyle}>
+              <p style={textStyle}>The red box is about {(visibility.intersectionRatio * 100).toFixed(1)}% crossed</p>
+            </div>
+          </React.Fragment>
+        );
+      }
+
+      ReactDOM.render(<InfiniteScroll />, document.getElementById('root'));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "name": "use-element-visibility",
+  "version": "0.3.0",
+  "description": "IntersectionObserver + React Hooks",
+  "main": "dist/useElementVisibility.js",
+  "scripts": {
+    "test": "jest",
+    "build": "rollup -c",
+    "release": "npm run build && npm publish",
+    "lint": "eslint src/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "intersection-observer": "^0.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.7.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "jest": "^24.8.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "rollup": "^1.11.3"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  }
+}
