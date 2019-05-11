@@ -3,6 +3,9 @@
   "version": "0.3.1",
   "description": "IntersectionObserver + React Hooks",
   "main": "dist/useElementVisibility.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "lint": "eslint src/",
     "test": "jest",
