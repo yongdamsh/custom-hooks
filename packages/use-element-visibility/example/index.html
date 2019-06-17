@@ -21,12 +21,12 @@
       };
       const threshold = new Array(101).fill().map((_, index) => index * 0.01);
 
-      function InfiniteScroll() {
+      function BasicExample() {
         const [visibility, subscribe] = useElementVisibility({ threshold });
 
         return (
           <React.Fragment>
-            <h1>InfiniteScroll Example</h1>
+            <h1>BasicExample Example</h1>
             <p>Scroll down ⬇️ </p>
             <div style={{ height: windowHeight }} />
             <div ref={subscribe} style={{ height: windowHeight, backgroundColor: 'red' }} />
@@ -37,7 +37,7 @@
         );
       }
 
-      ReactDOM.render(<InfiniteScroll />, document.getElementById('root'));
+      ReactDOM.render(<BasicExample />, document.getElementById('root'));
     </script>
   </body>
 </html>
