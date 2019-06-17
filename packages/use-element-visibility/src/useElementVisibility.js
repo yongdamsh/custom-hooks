@@ -1,22 +1,36 @@
 import "intersection-observer";
 import { useCallback, useState, useEffect, useRef } from "react";
 
-const defaultEntry = {
-  isIntersecting: false,
-  intersectionRatio: 0
+const defaultOptions = {
+  numberOfEntries: 1,
 };
-const defaultOptions = {};
+
+function getDefaultEntry(count) {
+  const defaultEntry = {
+    isIntersecting: false,
+    intersectionRatio: 0
+  };
+
+  if (count > 1) {
+    return new Array(count).fill().map(() => defaultEntry);
+  }
+
+  return defaultEntry;
+}
 
 function useElementVisibility(options = defaultOptions) {
   const ref = useRef(null);
-  const [visibility, setVisibility] = useState(defaultEntry);
+  const { numberOfEntries } = options;
+  const [visibility, setVisibility] = useState(getDefaultEntry(numberOfEntries));
 
   function getObserver() {
     if (ref.current === null) {
       ref.current = new window.IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          setVisibility(entry);
-        });
+        if (numberOfEntries > 1) {
+          setVisibility(entries);
+        } else {
+          setVisibility(entries[0]);
+        }
       }, options);
     }
 

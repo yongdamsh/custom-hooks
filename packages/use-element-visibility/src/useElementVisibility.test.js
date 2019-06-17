@@ -69,3 +69,27 @@ test('initial visibility values', () => {
   expect(container.querySelector('#isIntersecting').textContent).toBe('false');
   expect(container.querySelector('#intersectionRatio').textContent).toBe('0');
 });
+
+test('multiple visibility values', () => {
+  const numberOfEntries = 2;
+
+  act(() => {
+    const Component = () => {
+      const [visibilities, subscribe] = useElementVisibility({ numberOfEntries });
+
+      return (
+        <div>
+          {visibilities.map((_, index) => (
+            <p key={index} className="target">{index}</p>
+          ))}
+          <div ref={subscribe} />
+          <div ref={subscribe} />
+        </div>
+      );
+    };
+
+    ReactDOM.render(<Component />, container);
+  });
+
+  expect(container.querySelectorAll('.target').length).toBe(numberOfEntries);
+})
