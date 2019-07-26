@@ -150,7 +150,7 @@ Run the command below before looking at the example,
 npm run build
 ```
 
-Then run [index.html](example/index.html) in your browser.
+Then run [index.html](examples/index.html) in your browser.
 
 
 ## Browser Support
