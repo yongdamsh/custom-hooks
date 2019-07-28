@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <body style="margin: 0; padding: 0; text-align: center;">
+  <body style="margin: 0; padding: 0; text-align: center; box-sizing: border-box">
     <div id="root" />
 
     <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
@@ -23,16 +23,19 @@
 
       function BasicExample() {
         const [visibility, subscribe] = useElementVisibility({ threshold });
+        const percent = (visibility.intersectionRatio * 100).toFixed(1);
 
         return (
           <React.Fragment>
-            <h1>BasicExample Example</h1>
-            <p>Scroll down ⬇️ </p>
-            <div style={{ height: windowHeight }} />
-            <div ref={subscribe} style={{ height: windowHeight, backgroundColor: 'red' }} />
-            <div style={textWrapperStyle}>
-              <p style={textStyle}>The red box is about {(visibility.intersectionRatio * 100).toFixed(1)}% crossed</p>
+            <div style={{ height: windowHeight, paddingTop: '10px' }}>
+              <h1 style={{ marginTop: 0 }}>InfiniteScroll Example</h1>
+              <p>Scroll down ⬇️ </p>
             </div>
+            <div data-cy="red-box" ref={subscribe} style={{ height: windowHeight, backgroundColor: 'red' }} />
+            <div style={textWrapperStyle}>
+              <p data-cy="message" style={textStyle}>The red box is about {percent}% crossed</p>
+            </div>
+            <span data-cy="intersection-percent" style={{ display: 'none' }}>{percent}</span>
           </React.Fragment>
         );
       }
