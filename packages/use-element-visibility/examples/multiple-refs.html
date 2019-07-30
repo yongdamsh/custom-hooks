@@ -21,13 +21,28 @@
         color: 'white',
       };
       const threshold = new Array(101).fill().map((_, index) => index * 0.01);
+      const elements = {
+        red: 'red',
+        blue: 'blue',
+        green: 'green',
+      };
 
-      function AdvancedExample() {
-        const [visibility, subscribe] = useElementVisibility({ threshold });
+      function getRatio(visibilities, elementId) {
+        const visibility = visibilities.find(v => v.target.id === elementId);
+
+        if (!visibility) {
+          return 0;
+        }
+
+        return visibility.intersectionRatio;
+      }
+
+      function MutipleTargetsExample() {
+        const [visibilities, subscribe] = useElementVisibility({ threshold, multiple: true });
         const ratio = {
-          red: 0,
-          blue: 0,
-          green: 0,
+          [elements.red]: getRatio(visibilities, elements.red),
+          [elements.blue]: getRatio(visibilities, elements.blue),
+          [elements.green]: getRatio(visibilities, elements.green),
         };
 
         return (
@@ -36,20 +51,20 @@
               <h1 style={{ marginTop: 0 }}>InfiniteScroll Example</h1>
               <p>Scroll down ⬇️ </p>
             </div>
-            <div data-cy="red-box" ref={subscribe} style={{ ...boxStyles, backgroundColor: 'red' }}>
-              <p style={textStyles}>{ratio.red}</p>
+            <div data-cy="red-box" id={elements.red} ref={subscribe} style={{ ...boxStyles, backgroundColor: 'red' }}>
+              <p style={textStyles}>{ratio[elements.red]}</p>
             </div>
-            <div data-cy="blue-box" ref={subscribe} style={{ ...boxStyles, backgroundColor: 'blue' }}>
-              <p style={textStyles}>{ratio.blue}</p>
+            <div data-cy="blue-box" id={elements.blue} ref={subscribe} style={{ ...boxStyles, backgroundColor: 'blue' }}>
+              <p style={textStyles}>{ratio[elements.blue]}</p>
             </div>
-            <div data-cy="green-box" ref={subscribe} style={{ ...boxStyles, backgroundColor: 'green' }}>
-              <p style={textStyles}>{ratio.green}</p>
+            <div data-cy="green-box" id={elements.green} ref={subscribe} style={{ ...boxStyles, backgroundColor: 'green' }}>
+              <p style={textStyles}>{ratio[elements.green]}</p>
             </div>
           </React.Fragment>
         );
       }
 
-      ReactDOM.render(<AdvancedExample />, document.getElementById('root'));
+      ReactDOM.render(<MutipleTargetsExample />, document.getElementById('root'));
     </script>
   </body>
 </html>

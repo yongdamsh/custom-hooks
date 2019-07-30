@@ -2,17 +2,17 @@ import "intersection-observer";
 import { useCallback, useState, useEffect, useRef } from "react";
 
 const defaultOptions = {
-  numberOfEntries: 1,
+  multiple: false
 };
 
-function getDefaultEntry(count) {
+function getDefaultEntry(multiple) {
   const defaultEntry = {
     isIntersecting: false,
     intersectionRatio: 0
   };
 
-  if (count > 1) {
-    return new Array(count).fill().map(() => defaultEntry);
+  if (multiple) {
+    return [];
   }
 
   return defaultEntry;
@@ -20,13 +20,14 @@ function getDefaultEntry(count) {
 
 function useElementVisibility(options = defaultOptions) {
   const ref = useRef(null);
-  const { numberOfEntries } = options;
-  const [visibility, setVisibility] = useState(getDefaultEntry(numberOfEntries));
+  const observingNodes = useRef([]);
+  const { multiple } = options;
+  const [visibility, setVisibility] = useState(getDefaultEntry(multiple));
 
   function getObserver() {
     if (ref.current === null) {
       ref.current = new window.IntersectionObserver(entries => {
-        if (numberOfEntries > 1) {
+        if (multiple) {
           setVisibility(entries);
         } else {
           setVisibility(entries[0]);
@@ -42,11 +43,39 @@ function useElementVisibility(options = defaultOptions) {
     node => {
       if (node) {
         observer.observe(node);
+
+        if (multiple && !node.id) {
+          throw new Error('target node must have id attribute in multiple mode');
+        }
+
+        const isDuplicate = observingNodes.current.some(
+          currentNode => currentNode.id === node.id
+        );
+
+        if (!isDuplicate) {
+          observingNodes.current.push(node);
+        }
       }
     },
-    [observer]
+    [observer, multiple]
   );
-  const unsubscribe = () => observer.disconnect();
+  const unsubscribe = nodeId => {
+    if (!nodeId) {
+      observer.disconnect();
+      return;
+    }
+
+    const nodeToBeUnsubscribed = observingNodes.current.find(
+      node => node.id === nodeId
+    );
+
+    if (nodeToBeUnsubscribed) {
+      observer.unobserve(nodeToBeUnsubscribed);
+      return;
+    }
+
+    throw new Error('Cannot find the node to unsubscribe');
+  };
 
   useEffect(() => {
     return () => {
@@ -58,4 +87,3 @@ function useElementVisibility(options = defaultOptions) {
 }
 
 export default useElementVisibility;
-
