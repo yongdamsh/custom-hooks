@@ -118,6 +118,38 @@ function SomeComponent() {
 }
 ```
 
+You can also subscribe multiple nodes by using `multiple` option as below,
+
+
+```jsx
+function SomeComponent() {
+  const [visibilities, subscribe, unsubscribe] = useElementVisibility({ multiple: true })
+
+  // visibilities is an array of IntersectionObserverEntry
+  // so you can find each visibility by element ID
+  const visibilityOfItem1 = visibilities.find(v => v.target.id === 'item1');
+  const visibilityOfItem2 = visibilities.find(v => v.target.id === 'item2');
+  const visibilityOfItem3 = visibilities.find(v => v.target.id === 'item3');
+
+  return (
+    <main>
+      <ul>
+        <li id="item1" ref={subscribe}>Item 1</li>
+        <li id="item2" ref={subscribe}>Item 2</li>
+        <li id="item3" ref={subscribe}>Item 3</li>
+      </ul>
+      <pre>
+        Intersection ratio of item 1: ${visibilityOfItem1 && visibilityOfItem1.intersectionRatio}
+        Intersection ratio of item 2: ${visibilityOfItem2 && visibilityOfItem2.intersectionRatio}
+        Intersection ratio of item 3: ${visibilityOfItem3 && visibilityOfItem3.intersectionRatio}
+      </pre>
+    </main>
+  )
+}
+```
+
+> Note that the `id` attribute must be exist.
+
 #### `unsubscribe`
 A function to cancel subscription. This is useful if you need only until the node is exposed on the screen.
 
@@ -141,8 +173,35 @@ function SomeComponent() {
 }
 ```
 
+You can unsubscribe a specific node as shown below.
 
-## Basic Example
+```jsx
+function SomeComponent() {
+  const [visibilities, subscribe, unsubscribe] = useElementVisibility({ multiple: true });
+
+  useEffect(() => {
+    const intersectingEntries = visibilities.filter(v => v.isIntersecting);
+
+    intersectingEntries.forEach(entry => {
+      const lazyImage = entry.target;
+      lazyImage.src = lazyImage.dataset.src;
+
+      // Pass the element's id
+      unsubscribe(lazyImage.id);
+    });
+  }, [visibilities]);
+
+  return (
+    <>
+      <img id="img1" ref={subscribe} data-src="https://example.com/foo.jpg" />
+      <img id="img2" ref={subscribe} data-src="https://example.com/foo.jpg" />
+      <img id="img3" ref={subscribe} data-src="https://example.com/foo.jpg" />
+    </>
+  )
+}
+```
+
+## Examples
 
 Run the command below before looking at the example,
 
@@ -150,8 +209,10 @@ Run the command below before looking at the example,
 npm run build
 ```
 
-Then run [index.html](examples/index.html) in your browser.
-
+Then run below examples in your browser.
+- [basic.html](examples/basic.html): Basic use case
+- [multiple-refs.html](examples/multiple-refs.html): Usage of multiple elements
+Then run  in your browser.
 
 ## Browser Support
 

@@ -21,7 +21,7 @@
       };
       const threshold = new Array(101).fill().map((_, index) => index * 0.01);
 
-      function InfiniteScroll() {
+      function BasicExample() {
         const [visibility, subscribe] = useElementVisibility({ threshold });
         const percent = (visibility.intersectionRatio * 100).toFixed(1);
 
@@ -40,7 +40,7 @@
         );
       }
 
-      ReactDOM.render(<InfiniteScroll />, document.getElementById('root'));
+      ReactDOM.render(<BasicExample />, document.getElementById('root'));
     </script>
   </body>
 </html>
