@@ -120,6 +120,7 @@ function SomeComponent() {
 
 You can also subscribe multiple nodes by using `multiple` option as below,
 
+
 ```jsx
 function SomeComponent() {
   const [visibilities, subscribe, unsubscribe] = useElementVisibility({ multiple: true })
@@ -147,7 +148,7 @@ function SomeComponent() {
 }
 ```
 
-Note that the `id` attribute must be exist. You can use `data-entryid` arrtibute alternatively.
+> Note that the `id` attribute must be exist.
 
 #### `unsubscribe`
 A function to cancel subscription. This is useful if you need only until the node is exposed on the screen.
@@ -172,7 +173,7 @@ function SomeComponent() {
 }
 ```
 
-You can unsubscribe specific node as below,
+You can unsubscribe a specific node as shown below.
 
 ```jsx
 function SomeComponent() {
@@ -182,11 +183,11 @@ function SomeComponent() {
     const intersectingEntries = visibilities.filter(v => v.isIntersecting);
 
     intersectingEntries.forEach(entry => {
-      unsubscribe(entry.target.id)
-
-      // Process lazy loading
       const lazyImage = entry.target;
       lazyImage.src = lazyImage.dataset.src;
+
+      // Pass the element's id
+      unsubscribe(lazyImage.id);
     });
   }, [visibilities]);
 
