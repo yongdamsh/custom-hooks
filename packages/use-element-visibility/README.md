@@ -212,6 +212,7 @@ npm run build
 Then run below examples in your browser.
 - [basic.html](examples/basic.html): Basic use case
 - [multiple-refs.html](examples/multiple-refs.html): Usage of multiple elements
+- [active-tab.html](examples/multiple-refs.html): Tabs that are activated by scrolling
 Then run  in your browser.
 
 ## Browser Support
