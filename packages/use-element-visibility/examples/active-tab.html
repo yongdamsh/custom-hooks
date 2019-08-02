@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .tabs {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        position: fixed;
+        background-color: white;
+      }
+
+      .tab-item {
+        line-height: 60px;
+        flex: 1;
+        color: gray;
+        line-height: 60px;
+      }
+
+      .tab-item.active {
+        color: white;
+      }
+
+      .tab-item.red.active {
+        background-color: red;
+      }
+
+      .tab-item.blue.active {
+        background-color: blue;
+      }
+
+      .tab-item.green.active {
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body style="margin: 0; padding: 0; text-align: center; box-sizing: border-box">
+    <div id="root" />
+
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="../dist/useElementVisibility.js"></script>
+    <script type="text/babel">
+      const windowHeight = window.innerHeight + 'px';
+      const boxStyles = {
+        height: windowHeight,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      };
+      const threshold = new Array(101).fill().map((_, index) => index * 0.01);
+      const elements = {
+        red: 'red',
+        blue: 'blue',
+        green: 'green',
+      };
+
+      function getRatio(visibilities, elementId) {
+        const visibility = visibilities.find(v => v.target.id === elementId);
+
+        if (!visibility) {
+          return 0;
+        }
+
+        return visibility.intersectionRatio;
+      }
+
+      function findActiveTab(ratio) {
+        let maxRatio = 0;
+        let activeTab;
+
+        Object.keys(ratio).forEach(element => {
+          if (ratio[element] > maxRatio) {
+            activeTab = element;
+          }
+        });
+
+        return activeTab;
+      }
+
+      function ActiveTabExample() {
+        const [visibilities, subscribe] = useElementVisibility({ threshold, multiple: true });
+        const ratio = {
+          [elements.red]: getRatio(visibilities, elements.red),
+          [elements.blue]: getRatio(visibilities, elements.blue),
+          [elements.green]: getRatio(visibilities, elements.green),
+        };
+        const activeTab = findActiveTab(ratio);
+
+        return (
+          <React.Fragment>
+            <header className="tabs">
+              <div className={`tab-item red ${activeTab === elements.red ? 'active' : ''}`}>Red</div>
+              <div className={`tab-item blue ${activeTab === elements.blue ? 'active' : ''}`}>Blue</div>
+              <div className={`tab-item green ${activeTab === elements.green ? 'active' : ''}`}>Green</div>
+            </header>
+            <div data-cy="red-box" id={elements.red} ref={subscribe} style={{ ...boxStyles, backgroundColor: 'red' }} />
+            <div data-cy="blue-box" id={elements.blue} ref={subscribe} style={{ ...boxStyles, backgroundColor: 'blue' }} />
+            <div data-cy="green-box" id={elements.green} ref={subscribe} style={{ ...boxStyles, backgroundColor: 'green' }} />
+          </React.Fragment>
+        );
+      }
+
+      ReactDOM.render(<ActiveTabExample />, document.getElementById('root'));
+    </script>
+  </body>
+</html>
