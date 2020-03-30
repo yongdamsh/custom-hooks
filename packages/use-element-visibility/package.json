@@ -27,7 +27,7 @@
     "babel-jest": "^24.7.1",
     "eslint": "^6.1.0",
     "eslint-plugin-react-hooks": "^1.6.0",
-    "jest": "^24.8.0",
+    "jest": "^25.2.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "rollup": "^1.11.3",
